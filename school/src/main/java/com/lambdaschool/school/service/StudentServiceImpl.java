@@ -3,6 +3,7 @@ package com.lambdaschool.school.service;
 import com.lambdaschool.school.exceptions.ResourceNotFoundException;
 import com.lambdaschool.school.model.Course;
 import com.lambdaschool.school.model.Student;
+import com.lambdaschool.school.repository.CourseRepository;
 import com.lambdaschool.school.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class StudentServiceImpl implements StudentService
 {
     @Autowired
     private StudentRepository studrepos;
+
+    @Autowired
+    private CourseRepository courserepos;
 
     @Override
     public List<Student> findAll()
@@ -76,5 +80,24 @@ public class StudentServiceImpl implements StudentService
         }
 
         return studrepos.save(currentStudent);
+    }
+
+    public void insertStudentIntoCourse(long studid, long courseid)
+    {
+        Student currentStudent = studrepos.findById(studid)
+                .orElseThrow(() -> new ResourceNotFoundException(Long.toString(studid)));
+
+        Course currentCourse = courserepos.findById(courseid)
+                .orElseThrow(() -> new ResourceNotFoundException(Long.toString(studid)));
+
+        for(Course c: currentStudent.getCourses())
+        {
+            if(c.getCourseid()== currentCourse.getCourseid())
+            {
+
+                throw new ResourceNotFoundException("Student already enrolled");
+            }
+        }
+        studrepos.insertStudentIntoCourse(studid, courseid);
     }
 }

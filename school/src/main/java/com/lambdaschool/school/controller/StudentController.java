@@ -2,6 +2,7 @@ package com.lambdaschool.school.controller;
 
 import com.lambdaschool.school.model.Student;
 import com.lambdaschool.school.service.StudentService;
+import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,14 @@ public class StudentController
         responseHeaders.setLocation(newStudentURI);
 
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/Student/{StudentId}/course/{CourseId}")
+    public ResponseEntity<?> addStudentToCourse(@PathVariable long StudentId, @PathVariable long CourseId, HttpServletRequest request)
+    {
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
+        studentService.insertStudentIntoCourse(StudentId, CourseId);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
 
