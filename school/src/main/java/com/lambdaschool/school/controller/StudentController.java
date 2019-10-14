@@ -1,6 +1,9 @@
 package com.lambdaschool.school.controller;
 
+import com.lambdaschool.school.exceptions.ResourceNotFoundException;
+import com.lambdaschool.school.model.Course;
 import com.lambdaschool.school.model.Student;
+import com.lambdaschool.school.service.CourseService;
 import com.lambdaschool.school.service.StudentService;
 import org.apache.coyote.Response;
 import org.slf4j.Logger;
@@ -26,6 +29,9 @@ public class StudentController
 
     @Autowired
     private StudentService studentService;
+
+//    @Autowired
+//    private CourseService courseService;
 
     // Please note there is no way to add students to course yet!
 
@@ -101,6 +107,7 @@ public class StudentController
         logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + Studentid + " accessed");
 
         studentService.update(updateStudent, Studentid);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -114,6 +121,16 @@ public class StudentController
         logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + Studentid + " accessed");
         studentService.delete(Studentid);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/Student/{StudentId}/course/{CourseId}")
+    public ResponseEntity<?> deleteStudentFromCourse(@PathVariable long StudentId, @PathVariable long CourseId, HttpServletRequest request)
+    {
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
+
+
+        studentService.deleteStudentFromCourse(StudentId, CourseId);
+        return new ResponseEntity<>("DELETED", HttpStatus.OK);
     }
 
 }

@@ -100,4 +100,24 @@ public class StudentServiceImpl implements StudentService
         }
         studrepos.insertStudentIntoCourse(studid, courseid);
     }
+
+    public void deleteStudentFromCourse(long studid, long courseid)
+    {
+        Student currentStudent = studrepos.findById(studid)
+                .orElseThrow(() -> new ResourceNotFoundException(Long.toString(studid)));
+
+        Course currentCourse = courserepos.findById(courseid)
+                .orElseThrow(() -> new ResourceNotFoundException(Long.toString(studid)));
+
+        for(Course c: currentStudent.getCourses())
+        {
+            if(c.getCourseid()== currentCourse.getCourseid())
+            {
+                studrepos.deleteStudentFromCourse(studid, courseid);
+                return;
+            }
+        }
+        throw new ResourceNotFoundException("Student Not enrolled");
+
+    }
 }

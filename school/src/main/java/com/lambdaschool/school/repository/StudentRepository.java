@@ -18,4 +18,9 @@ public interface StudentRepository extends CrudRepository<Student, Long>
     @Query(value = "INSERT INTO studcourses (studid, courseid) VALUES (:studid, :courseid)", nativeQuery = true)
     void insertStudentIntoCourse(long studid, long courseid);
 
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM studcourses WHERE courseid = :courseid AND studid = :studid", nativeQuery = true)
+    void deleteStudentFromCourse(long studid, long courseid);
+
 }

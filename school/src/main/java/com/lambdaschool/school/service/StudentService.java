@@ -19,4 +19,6 @@ public interface StudentService
     Student update(Student student, long id);
 
     void insertStudentIntoCourse(long studid, long courseid);
+
+    void deleteStudentFromCourse(long studid, long courseid);
 }
