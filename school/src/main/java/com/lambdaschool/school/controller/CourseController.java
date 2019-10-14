@@ -27,7 +27,8 @@ public class CourseController
     @GetMapping(value = "/studcount", produces = {"application/json"})
     public ResponseEntity<?> getCountStudentsInCourses()
     {
-        return new ResponseEntity<>(courseService.getCountStudentsInCourse(), HttpStatus.OK);
+        ArrayList<CountStudentsInCourses> countList = courseService.getCountStudentsInCourse();
+        return new ResponseEntity<>(countList, HttpStatus.OK);
     }
 
     @DeleteMapping("/courses/{courseid}")
