@@ -50,7 +50,7 @@ public class StudentController
             @PathVariable
                     Long StudentId, HttpServletRequest request)
     {
-        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + StudentId + " accessed");
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         Student r = studentService.findStudentById(StudentId);
         return new ResponseEntity<>(r, HttpStatus.OK);
@@ -62,7 +62,7 @@ public class StudentController
     public ResponseEntity<?> getStudentByNameContaining(
             @PathVariable String name, HttpServletRequest request)
     {
-        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + name + " accessed");
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         List<Student> myStudents = studentService.findStudentByNameLike(name);
         return new ResponseEntity<>(myStudents, HttpStatus.OK);
@@ -104,7 +104,7 @@ public class StudentController
             @PathVariable
                     long Studentid, HttpServletRequest request)
     {
-        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + Studentid + " accessed");
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         studentService.update(updateStudent, Studentid);
 
@@ -118,7 +118,7 @@ public class StudentController
                     long Studentid, HttpServletRequest request)
     {
 
-        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + Studentid + " accessed");
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
         studentService.delete(Studentid);
         return new ResponseEntity<>(HttpStatus.OK);
     }

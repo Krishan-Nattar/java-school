@@ -44,7 +44,7 @@ public class CourseController
     @DeleteMapping("/courses/{courseid}")
     public ResponseEntity<?> deleteCourseById(@PathVariable long courseid, HttpServletRequest request)
     {
-        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + courseid + " accessed");
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         courseService.delete(courseid);
         return new ResponseEntity<>(HttpStatus.OK);
