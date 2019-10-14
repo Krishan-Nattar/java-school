@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 @RestController
@@ -23,27 +24,27 @@ public class CourseController
     private CourseService courseService;
 
     @GetMapping(value = "/courses", produces = {"application/json"})
-    public ResponseEntity<?> listAllCourses()
+    public ResponseEntity<?> listAllCourses(HttpServletRequest request)
     {
-        logger.info("GET /courses/courses accessed");
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         ArrayList<Course> myCourses = courseService.findAll();
         return new ResponseEntity<>(myCourses, HttpStatus.OK);
     }
 
     @GetMapping(value = "/studcount", produces = {"application/json"})
-    public ResponseEntity<?> getCountStudentsInCourses()
+    public ResponseEntity<?> getCountStudentsInCourses(HttpServletRequest request)
     {
-        logger.info("GET /courses/studcount accessed");
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         ArrayList<CountStudentsInCourses> countList = courseService.getCountStudentsInCourse();
         return new ResponseEntity<>(countList, HttpStatus.OK);
     }
 
     @DeleteMapping("/courses/{courseid}")
-    public ResponseEntity<?> deleteCourseById(@PathVariable long courseid)
+    public ResponseEntity<?> deleteCourseById(@PathVariable long courseid, HttpServletRequest request)
     {
-        logger.info("DELETE /courses/ +" + courseid + " accessed");
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + courseid + " accessed");
 
         courseService.delete(courseid);
         return new ResponseEntity<>(HttpStatus.OK);

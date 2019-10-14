@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -28,9 +29,9 @@ public class StudentController
     // Please note there is no way to add students to course yet!
 
     @GetMapping(value = "/students", produces = {"application/json"})
-    public ResponseEntity<?> listAllStudents()
+    public ResponseEntity<?> listAllStudents(HttpServletRequest request)
     {
-        logger.info("GET /students/students accessed");
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         List<Student> myStudents = studentService.findAll();
         return new ResponseEntity<>(myStudents, HttpStatus.OK);
@@ -40,9 +41,9 @@ public class StudentController
                 produces = {"application/json"})
     public ResponseEntity<?> getStudentById(
             @PathVariable
-                    Long StudentId)
+                    Long StudentId, HttpServletRequest request)
     {
-        logger.info("GET /students/Student/" + StudentId + " accessed");
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + StudentId + " accessed");
 
         Student r = studentService.findStudentById(StudentId);
         return new ResponseEntity<>(r, HttpStatus.OK);
@@ -52,9 +53,9 @@ public class StudentController
     @GetMapping(value = "/student/namelike/{name}",
                 produces = {"application/json"})
     public ResponseEntity<?> getStudentByNameContaining(
-            @PathVariable String name)
+            @PathVariable String name, HttpServletRequest request)
     {
-        logger.info("GET /students/namelike/" + name + " accessed");
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + name + " accessed");
 
         List<Student> myStudents = studentService.findStudentByNameLike(name);
         return new ResponseEntity<>(myStudents, HttpStatus.OK);
@@ -66,9 +67,9 @@ public class StudentController
                  produces = {"application/json"})
     public ResponseEntity<?> addNewStudent(@Valid
                                            @RequestBody
-                                                   Student newStudent) throws URISyntaxException
+                                                   Student newStudent, HttpServletRequest request) throws URISyntaxException
     {
-        logger.info("POST /students/Student accessed");
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         newStudent = studentService.save(newStudent);
 
@@ -86,9 +87,9 @@ public class StudentController
             @RequestBody
                     Student updateStudent,
             @PathVariable
-                    long Studentid)
+                    long Studentid, HttpServletRequest request)
     {
-        logger.info("PUT /students/Student/" + Studentid + " accessed");
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + Studentid + " accessed");
 
         studentService.update(updateStudent, Studentid);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -98,10 +99,10 @@ public class StudentController
     @DeleteMapping("/Student/{Studentid}")
     public ResponseEntity<?> deleteStudentById(
             @PathVariable
-                    long Studentid)
+                    long Studentid, HttpServletRequest request)
     {
-        logger.info("DELETE /students/Student/" + Studentid + " accessed");
 
+        logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + Studentid + " accessed");
         studentService.delete(Studentid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
