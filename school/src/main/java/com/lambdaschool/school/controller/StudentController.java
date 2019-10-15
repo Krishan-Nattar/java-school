@@ -149,9 +149,13 @@ public class StudentController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @ApiOperation(value = "Delete a student", response = void.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Student deleted successfully", response = void.class),
+            @ApiResponse(code = 500, message = "Error deleting student", response = ErrorDetail.class)
+    })
     @DeleteMapping("/Student/{Studentid}")
-    public ResponseEntity<?> deleteStudentById(
+    public ResponseEntity<?> deleteStudentById(@ApiParam(value = "Student id", required = true, example = "1")
             @PathVariable
                     long Studentid, HttpServletRequest request)
     {
