@@ -23,6 +23,7 @@ public class CourseController
     @Autowired
     private CourseService courseService;
 
+
     @GetMapping(value = "/courses", produces = {"application/json"})
     public ResponseEntity<?> listAllCourses(HttpServletRequest request)
     {
