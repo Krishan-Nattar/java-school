@@ -1,11 +1,10 @@
 package com.lambdaschool.school.controller;
 
 import com.lambdaschool.school.model.Course;
+import com.lambdaschool.school.model.ErrorDetail;
 import com.lambdaschool.school.service.CourseService;
 import com.lambdaschool.school.view.CountStudentsInCourses;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ public class CourseController
     @Autowired
     private CourseService courseService;
 
-    @ApiOperation(value="return all Restaurants using paging and sorting", response = Course.class, responseContainer = "List")
+    @ApiOperation(value="return all courses using paging and sorting", response = Course.class, responseContainer = "List")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", value = "Results page you want to retrieve(0..n)"),//these are all just text fields printed. They can be anything
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", value = "Number of records per page"),
@@ -46,6 +45,7 @@ public class CourseController
         return new ResponseEntity<>(myCourses, HttpStatus.OK);
     }
 
+    @ApiOperation(value="returns a count of students in courses", response = CountStudentsInCourses.class, responseContainer = "List")
     @GetMapping(value = "/studcount", produces = {"application/json"})
     public ResponseEntity<?> getCountStudentsInCourses(HttpServletRequest request)
     {
@@ -55,8 +55,14 @@ public class CourseController
         return new ResponseEntity<>(countList, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Delete a course", notes = "The course id entered will be deleted", response = void.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Course deleted successfully", response = void.class),
+            @ApiResponse(code = 500, message = "Error deleting course", response = ErrorDetail.class)
+    })
     @DeleteMapping("/courses/{courseid}")
-    public ResponseEntity<?> deleteCourseById(@PathVariable long courseid, HttpServletRequest request)
+    public ResponseEntity<?> deleteCourseById(@ApiParam(value = "Course Id", required = true, example = "1")
+            @PathVariable long courseid, HttpServletRequest request)
     {
         logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
