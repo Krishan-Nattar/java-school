@@ -130,7 +130,11 @@ public class StudentController
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-
+    @ApiOperation(value = "Updates student details", response = void.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Student updated Successfully", response = void.class),
+            @ApiResponse(code = 500, message = "Error updating student", response = ErrorDetail.class)
+    })
     @PutMapping(value = "/Student/{Studentid}")
     public ResponseEntity<?> updateStudent(
             @RequestBody
@@ -157,8 +161,15 @@ public class StudentController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Unenroll a student from a course", notes = "The student must already be enrolled for this endpoint to function", response = void.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Student unenrolled successfully", response = void.class),
+            @ApiResponse(code = 500, message = "Error unenrolling student", response = ErrorDetail.class)
+    })
     @DeleteMapping("/Student/{StudentId}/course/{CourseId}")
-    public ResponseEntity<?> deleteStudentFromCourse(@PathVariable long StudentId, @PathVariable long CourseId, HttpServletRequest request)
+    public ResponseEntity<?> deleteStudentFromCourse(
+            @ApiParam(value = "Student id", required = true, example = "1")@PathVariable long StudentId,
+            @ApiParam(value = "Course id", required = true, example = "1")@PathVariable long CourseId, HttpServletRequest request)
     {
         logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
