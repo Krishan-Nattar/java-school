@@ -1,6 +1,7 @@
 package com.lambdaschool.school.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,10 +11,12 @@ import java.util.List;
 @Table(name = "course")
 public class Course
 {
+    @ApiModelProperty(name = "courseid", value = "primary key for Course", required = true, example = "1")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long courseid;
 
+    @ApiModelProperty(name = "coursename", value = "Full course name", example = "Economics 115")
     private String coursename;
 
     @ManyToOne
