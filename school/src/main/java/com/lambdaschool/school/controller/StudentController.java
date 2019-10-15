@@ -2,12 +2,11 @@ package com.lambdaschool.school.controller;
 
 import com.lambdaschool.school.exceptions.ResourceNotFoundException;
 import com.lambdaschool.school.model.Course;
+import com.lambdaschool.school.model.ErrorDetail;
 import com.lambdaschool.school.model.Student;
 import com.lambdaschool.school.service.CourseService;
 import com.lambdaschool.school.service.StudentService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +49,7 @@ public class StudentController
 
     })
     @GetMapping(value = "/students", produces = {"application/json"})
-    public ResponseEntity<?> listAllStudents(HttpServletRequest request, @PageableDefault(page=0, size=5)
+    public ResponseEntity<?> listAllStudents(HttpServletRequest request, @PageableDefault(page=0, size=3)
             Pageable pageable)
     {
         logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
@@ -59,9 +58,13 @@ public class StudentController
         return new ResponseEntity<>(myStudents, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Retrieves a student associated with the student id.", response = Student.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Student Found", response = Student.class),
+            @ApiResponse(code = 404, message = "Student Not Found", response = ErrorDetail.class)})
     @GetMapping(value = "/Student/{StudentId}",
                 produces = {"application/json"})
-    public ResponseEntity<?> getStudentById(
+    public ResponseEntity<?> getStudentById(@ApiParam(value = "Student Id", required = true, example = "1")
             @PathVariable
                     Long StudentId, HttpServletRequest request)
     {
@@ -72,9 +75,13 @@ public class StudentController
     }
 
 
+    @ApiOperation(value = "Retrieves a student with a matching name.", response = Student.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Student Found", response = Student.class),
+            @ApiResponse(code = 404, message = "Student Not Found", response = ErrorDetail.class)})
     @GetMapping(value = "/student/namelike/{name}",
                 produces = {"application/json"})
-    public ResponseEntity<?> getStudentByNameContaining(
+    public ResponseEntity<?> getStudentByNameContaining(@ApiParam(value = "Student Id", required = true, example = "John")
             @PathVariable String name, HttpServletRequest request)
     {
         logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
@@ -84,6 +91,11 @@ public class StudentController
     }
 
 
+    @ApiOperation(value = "Creates a new Student", notes = "The newly created student id will be sent in the location header", response = void.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Student Created Successfully", response = void.class),
+            @ApiResponse(code = 500, message = "Error creating student", response = ErrorDetail.class)
+    })
     @PostMapping(value = "/Student",
                  consumes = {"application/json"},
                  produces = {"application/json"})
@@ -103,8 +115,15 @@ public class StudentController
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Enrolls a student into a preexisting course", notes = "A student must not already be enrolled for this endpoint to function properly", response = void.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Student enrolled Successfully", response = void.class),
+            @ApiResponse(code = 500, message = "Error enrolling student", response = ErrorDetail.class)
+    })
     @GetMapping("/Student/{StudentId}/course/{CourseId}")
-    public ResponseEntity<?> addStudentToCourse(@PathVariable long StudentId, @PathVariable long CourseId, HttpServletRequest request)
+    public ResponseEntity<?> addStudentToCourse(@ApiParam(value = "Student Id", required = true, example = "1")
+            @PathVariable long StudentId, @ApiParam(value = "Course Id", required = true, example = "1")
+                                                @PathVariable long CourseId, HttpServletRequest request)
     {
         logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
         studentService.insertStudentIntoCourse(StudentId, CourseId);

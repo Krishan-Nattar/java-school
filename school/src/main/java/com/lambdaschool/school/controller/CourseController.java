@@ -37,7 +37,7 @@ public class CourseController
 
     })
     @GetMapping(value = "/courses", produces = {"application/json"})
-    public ResponseEntity<?> listAllCourses(@PageableDefault(page = 0,size=5)Pageable pageable, HttpServletRequest request)
+    public ResponseEntity<?> listAllCourses(@PageableDefault(page = 0,size=3)Pageable pageable, HttpServletRequest request)
     {
         logger.info(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
